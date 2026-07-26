@@ -45,6 +45,7 @@ func main() {
 
 func runLoadTest(url string, totalRequests, concurrency int) {
 	requestsPerWorker := totalRequests / concurrency
+	remainder := totalRequests % concurrency
 
 	results := make(chan result, totalRequests)
 	client := &http.Client{}
@@ -57,7 +58,13 @@ func runLoadTest(url string, totalRequests, concurrency int) {
 		}
 	}
 
+	for i := 0; i < remainder; i++ {
+		wg.Add(1)
+		go worker(client, url, results, &wg)
+	}
+
 	wg.Wait()
+	close(results)
 
 	var totalDuration time.Duration
 	var totalOk int64 = 0
@@ -70,7 +77,6 @@ func runLoadTest(url string, totalRequests, concurrency int) {
 		}
 		statusCode[r.statusCode]++
 	}
-	close(results)
 
 	fmt.Println("=== RELATÓRIO DE TESTE DE CARGA ===")
 	fmt.Println()
