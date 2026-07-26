@@ -38,9 +38,6 @@ func main() {
 	}
 
 	fmt.Printf("Iniciando teste de carga...\n")
-	fmt.Printf("URL: %s\n", *url)
-	fmt.Printf("Requisições totais: %d\n", *requests)
-	fmt.Printf("Concorrência: %d\n\n", *concurrency)
 
 	runLoadTest(*url, *requests, *concurrency)
 
@@ -78,9 +75,8 @@ func runLoadTest(url string, totalRequests, concurrency int) {
 	fmt.Println("=== RELATÓRIO DE TESTE DE CARGA ===")
 	fmt.Println()
 	fmt.Printf("Tempo total gasto na execução: %v\n", totalDuration)
-	fmt.Printf("Quantidade total de requests realizados: %v\n", totalDuration/time.Duration(totalRequests))
-	fmt.Printf("Quantidade total de requests realizados. %v\n", totalRequests)
-	fmt.Printf("Quantidade de requests com status HTTP 200: %v\n", totalOk)
+	fmt.Printf("Quantidade total de requests realizados: %v\n", totalRequests)
+	fmt.Printf("Quantidade de requests com status HTTP 200. %v\n", totalOk)
 
 	for code, count := range statusCode {
 		fmt.Printf("Quantidade de requests com status HTTP %d: %v\n", code, count)
@@ -94,7 +90,7 @@ func worker(client *http.Client, url string, results chan<- result, wg *sync.Wai
 	duration := time.Since(start)
 
 	if err != nil {
-		results <- result{statusCode: resp.StatusCode, duration: duration, err: err}
+		results <- result{statusCode: 0, duration: duration, err: err}
 		return
 	}
 
