@@ -1,4 +1,4 @@
-# Stress Test em Golang
+# Stress Test em Golang (MBA desafio técnico)
 
 Sistema de CLI (Command Line Interface) desenvolvido em Go para realizar testes de carga em serviços web. A aplicação dispara múltiplas requisições HTTP concorrentes contra uma URL informada e gera um relatório detalhado ao final da execução.
 
