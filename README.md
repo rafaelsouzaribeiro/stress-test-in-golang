@@ -1,0 +1,1 @@
+## Stress Test em golang - Em construção
