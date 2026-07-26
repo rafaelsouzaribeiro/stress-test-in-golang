@@ -55,6 +55,6 @@ func RunLoadTest(url string, totalRequests, concurrency int) {
 	fmt.Printf("Quantidade de requests com status HTTP 200. %v\n", totalOk)
 
 	for code, count := range statusCode {
-		fmt.Printf("Quantidade de requests com status HTTP %d: %v\n", code, count)
+		fmt.Printf("Quantidade de requests com status HTTP: %d Quantidade: %v\n", code, count)
 	}
 }
