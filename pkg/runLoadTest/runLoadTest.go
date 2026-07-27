@@ -19,11 +19,6 @@ func RunLoadTest(url string, totalRequests, concurrency int) {
 
 	client := &http.Client{
 		Timeout: 30 * time.Second,
-		Transport: &http.Transport{
-			MaxIdleConns:        concurrency,
-			MaxIdleConnsPerHost: concurrency,
-			IdleConnTimeout:     90 * time.Second,
-		},
 	}
 
 	var wg sync.WaitGroup
