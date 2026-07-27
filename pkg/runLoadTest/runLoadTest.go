@@ -17,7 +17,7 @@ func RunLoadTest(url string, totalRequests, concurrency int) {
 	requestsPerWorker := totalRequests / concurrency
 	remainder := totalRequests % concurrency
 
-	results := make(chan result, totalRequests)
+	results := make(chan result)
 	client := &http.Client{}
 	var wg sync.WaitGroup
 
