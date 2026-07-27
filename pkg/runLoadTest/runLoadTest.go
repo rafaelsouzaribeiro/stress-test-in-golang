@@ -14,8 +14,8 @@ type result struct {
 }
 
 func RunLoadTest(url string, totalRequests, concurrency int) {
-	jobs := make(chan struct{}, totalRequests)
-	results := make(chan result, concurrency)
+	jobs := make(chan struct{})
+	results := make(chan result)
 
 	client := &http.Client{
 		Timeout: 30 * time.Second,
