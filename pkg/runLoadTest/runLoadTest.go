@@ -51,6 +51,12 @@ func RunLoadTest(url string, totalRequests, concurrency int) {
 
 	for r := range results {
 		totalDuration += r.duration
+		if r.err != nil {
+			fmt.Printf("Erro na requisição: %v\n", r.err)
+			statusCode[0]++
+			continue
+		}
+
 		if r.statusCode == http.StatusOK {
 			totalOk++
 			continue
