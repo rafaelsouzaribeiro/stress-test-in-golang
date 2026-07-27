@@ -14,31 +14,46 @@ type result struct {
 }
 
 func RunLoadTest(url string, totalRequests, concurrency int) {
-	requestsPerWorker := totalRequests / concurrency
-	remainder := totalRequests % concurrency
+	jobs := make(chan struct{}, totalRequests)
+	results := make(chan result, concurrency)
 
-	results := make(chan result)
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: 30 * time.Second,
+		Transport: &http.Transport{
+			MaxIdleConns:        concurrency,
+			MaxIdleConnsPerHost: concurrency,
+			IdleConnTimeout:     90 * time.Second,
+		},
+	}
+
 	var wg sync.WaitGroup
 
 	for i := 0; i < concurrency; i++ {
-		for j := 0; j < requestsPerWorker; j++ {
-			wg.Add(1)
-			go worker(client, url, results, &wg)
-		}
-	}
-
-	for i := 0; i < remainder; i++ {
 		wg.Add(1)
-		go worker(client, url, results, &wg)
+		go func() {
+			defer wg.Done()
+			for range jobs {
+				worker(client, url, results)
+			}
+		}()
 	}
 
-	wg.Wait()
-	close(results)
+	go func() {
+		for i := 0; i < totalRequests; i++ {
+			jobs <- struct{}{}
+		}
+		close(jobs)
+	}()
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
 
 	var totalDuration time.Duration
-	var totalOk int64 = 0
-	var statusCode = make(map[int]int)
+	var totalOk int64
+	statusCode := make(map[int]int)
+
 	for r := range results {
 		totalDuration += r.duration
 		if r.statusCode == http.StatusOK {

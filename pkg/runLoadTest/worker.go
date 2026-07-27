@@ -2,12 +2,10 @@ package runloadtest
 
 import (
 	"net/http"
-	"sync"
 	"time"
 )
 
-func worker(client *http.Client, url string, results chan<- result, wg *sync.WaitGroup) {
-	defer wg.Done()
+func worker(client *http.Client, url string, results chan<- result) {
 	start := time.Now()
 	resp, err := client.Get(url)
 	duration := time.Since(start)
