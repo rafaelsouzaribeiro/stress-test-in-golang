@@ -80,6 +80,8 @@ O projeto utiliza o padrão de **lotes concorrentes** (batches), onde:
 stress-test-in-golang/
 ├── cmd/
 │   └── main.go          # Ponto de entrada da aplicação (CLI)
+├── pkg/
+│   └── runLoadTest/     # Lógica de execução do teste de carga
 ├── Dockerfile            # Build multi-stage (imagem final baseada em scratch)
 ├── go.mod
 ├── go.sum
