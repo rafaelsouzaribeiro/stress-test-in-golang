@@ -14,7 +14,7 @@ A aplicação aceita os seguintes parâmetros via linha de comando:
 
 | Parâmetro       | Descrição                                         | Obrigatório | Exemplo                  |
 |-----------------|----------------------------------------------------|-------------|---------------------------|
-| `--url`         | URL do serviço a ser testado                        | Sim         | `http://google.com`      |
+| `--url`         | URL do serviço a ser testado                        | Sim         | `https://reqbin.com/`      |
 | `--requests`    | Número total de requisições a serem realizadas       | Sim         | `1000`                    |
 | `--concurrency` | Número de chamadas simultâneas                      | Sim         | `10`                      |
 
@@ -37,7 +37,7 @@ Ao final da execução, o sistema apresenta no console:
 Clone o repositório e execute:
 
 ```bash
-go run cmd/main.go --url=http://google.com --requests=1000 --concurrency=10
+go run cmd/main.go --url=https://reqbin.com/ --requests=1000 --concurrency=10
 ```
 
 ## Executando via Docker (Obrigatório)
@@ -51,7 +51,7 @@ docker build -t stress-test .
 ### 2. Executar o teste de carga
 
 ```bash
-docker run stress-test --url=http://google.com --requests=1000 --concurrency=10
+docker run stress-test --url=https://reqbin.com/ --requests=1000 --concurrency=10
 ```
 
 ## Exemplo de Saída
