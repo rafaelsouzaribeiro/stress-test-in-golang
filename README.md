@@ -68,11 +68,14 @@ Quantidade de requests com status HTTP: 404 Quantidade: 2
 
 ## Arquitetura
 
-O projeto utiliza o padrão de **lotes concorrentes** (batches), onde:
+O projeto utiliza o padrão de **worker pool**, onde:
 
-1. Um channel com buffer de tamanho `concurrency` atua como semáforo, limitando quantas requisições rodam simultaneamente
-2. Um lote de requisições é disparado e o sistema aguarda **todas** finalizarem (`sync.WaitGroup`) antes de iniciar o próximo lote
-3. Ao final, os resultados são agregados e o relatório é impresso no console
+1. Um channel (`jobs`) distribui as requisições a serem executadas
+2. Um número fixo de goroutines (`concurrency`), definido pelo usuário, consome esse channel simultaneamente, cada uma processando uma requisição por vez até o channel ser fechado
+3. Um `sync.WaitGroup` aguarda todas as goroutines finalizarem para então fechar o channel de resultados (`results`)
+4. Os resultados de cada requisição (status HTTP, duração e erros) são enviados por um channel e agregados de forma concorrente
+5. Ao final, os resultados são consolidados e o relatório é impresso no console
+
 
 ## Estrutura do Projeto
 
